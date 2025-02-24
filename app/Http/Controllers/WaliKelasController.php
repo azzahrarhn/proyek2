@@ -24,31 +24,42 @@ class WaliKelasController extends Controller
 
     // Menyimpan data wali kelas
     public function store(Request $request)
-    {
-        try {
-            // Validasi Input
-            $request->validate([
-                'guru_id' => 'required|exists:users,id',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:8',
-            ]);
+{
+    try {
+        // Validasi Input
+        $request->validate([
+            'guru_id' => 'required|exists:users,id',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
+            'kelas' => 'required',
+        ]);
 
-            // Ambil data guru yang dipilih
-            $guru = User::findOrFail($request->guru_id);
-
-            // Update role guru menjadi wali kelas
-            $guru->update([
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role' => 'Wali Kelas',
-            ]);
-
-            return redirect()->route('wali_kelas.kelola')->with('success', 'Wali Kelas berhasil ditambahkan');
-
-        } catch (\Exception $e) {
-            return back()->withInput()->with('error', 'Gagal menambahkan Wali Kelas: ' . $e->getMessage());
+        // Cek apakah guru sudah menjadi wali kelas
+        $guru = User::findOrFail($request->guru_id);
+        if ($guru->role === 'Wali Kelas') {
+            return back()->withInput()->with('error', 'Guru ini sudah menjadi Wali Kelas dan tidak bisa dipilih lagi.');
         }
+
+        // Cek apakah kelas sudah memiliki wali kelas
+        $waliKelas = User::where('role', 'Wali Kelas')->where('kelas', $request->kelas)->first();
+        if ($waliKelas) {
+            return back()->withInput()->with('error', 'Kelas ini sudah memiliki Wali Kelas.');
+        }
+
+        // Update role guru menjadi wali kelas
+        $guru->update([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'Wali Kelas',
+            'kelas' => $request->kelas, // Simpan kelas yang diampu
+        ]);
+
+        return redirect()->route('wali_kelas.kelola')->with('success', 'Wali Kelas berhasil ditambahkan.');
+
+    } catch (\Exception $e) {
+        return back()->withInput()->with('error', 'Gagal menambahkan Wali Kelas: ' . $e->getMessage());
     }
+}
 
     // Menampilkan form edit wali kelas
     public function edit($id)
@@ -59,38 +70,68 @@ class WaliKelasController extends Controller
 
     // Menyimpan perubahan wali kelas
     public function update(Request $request, $id)
-    {
-        try {
-            $request->validate([
-                'email' => 'required|email|unique:users,email,' . $id,
-                'password' => 'nullable|min:8', // Password opsional
-            ]);
+{
+    try {
+        // Validasi Input
+        $request->validate([
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'nullable|min:8', // Password opsional
+            'kelas' => 'required',
+        ]);
 
-            $wali_kelas = User::findOrFail($id);
+        $wali_kelas = User::findOrFail($id);
 
-            // Cek apakah password dikosongkan
-            $data = [
-                'email' => $request->email,
-            ];
+        // Cek apakah ada guru lain yang sudah menjadi wali kelas untuk kelas ini
+        $waliKelasLain = User::where('role', 'Wali Kelas')
+                            ->where('kelas', $request->kelas)
+                            ->where('id', '!=', $id) // Hindari cek diri sendiri
+                            ->first();
 
-            if (!empty($request->password)) {
-                $data['password'] = Hash::make($request->password);
-            }
-
-            // Update data
-            $wali_kelas->update($data);
-
-            return redirect()->route('wali_kelas.kelola')->with('success', 'Data Wali Kelas berhasil diperbarui');
-
-        } catch (\Exception $e) {
-            return back()->withInput()->with('error', 'Gagal memperbarui Wali Kelas: ' . $e->getMessage());
+        if ($waliKelasLain) {
+            return back()->withInput()->with('error', 'Kelas ini sudah memiliki Wali Kelas lain.');
         }
+
+        // Perbarui data wali kelas
+        $data = [
+            'email' => $request->email,
+            'kelas' => $request->kelas,
+        ];
+
+        // Cek apakah password dikosongkan atau ingin diubah
+        if (!empty($request->password)) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $wali_kelas->update($data);
+
+        return redirect()->route('wali_kelas.kelola')->with('success', 'Data Wali Kelas berhasil diperbarui');
+
+    } catch (\Exception $e) {
+        return back()->withInput()->with('error', 'Gagal memperbarui Wali Kelas: ' . $e->getMessage());
     }
+}
 
     // Menghapus wali kelas
     public function destroy($id)
-    {
-        User::findOrFail($id)->delete();
-        return redirect()->route('wali_kelas.kelola')->with('success', 'Wali Kelas berhasil dihapus');
+{
+    try {
+        $waliKelas = User::findOrFail($id);
+
+        // Pastikan yang dihapus benar-benar wali kelas
+        if ($waliKelas->role !== 'Wali Kelas') {
+            return back()->with('error', 'Hanya Wali Kelas yang dapat dihapus.');
+        }
+
+        // Update kolom tanpa menghapus data dan tanpa mengubah kelas
+        $waliKelas->update([
+            'email' => null,
+            'password' => null,
+            'role' => 'Guru',
+        ]);
+
+        return redirect()->route('wali_kelas.kelola')->with('success', 'Wali Kelas berhasil dikembalikan menjadi Guru.');
+    } catch (\Exception $e) {
+        return back()->with('error', 'Gagal menghapus Wali Kelas: ' . $e->getMessage());
     }
+}
 }

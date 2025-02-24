@@ -77,8 +77,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center"
-                                href="{{ route('admin.profile') }}">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.profile') }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -110,7 +109,7 @@
     <aside id="sidebar" class="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
             <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('admin.dashboard') }}">
+                <a class="nav-link collapsed" href="{{ route('admin.dashboard') }}">
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </a>
@@ -122,12 +121,12 @@
                 </a>
                 <ul id="data-siswa-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('biodata_siswa.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('biodata_siswa.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Siswa</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('biodata_siswa.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('biodata_siswa.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Siswa</span>
                         </a>
                     </li>
@@ -135,7 +134,7 @@
             </li><!-- End Data Siswa Nav -->
 
             <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('mata_pelajaran.create') }}">
+                <a class="nav-link collapsed" href="{{ route('mata_pelajaran.create') }}">
                     <i class="bi bi-journal-bookmark"></i><span>Mata Pelajaran</span>
                 </a>
             </li><!-- End Mata Pelajaran Nav -->
@@ -146,12 +145,12 @@
                 </a>
                 <ul id="data-guru-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Guru</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Guru</span>
                         </a>
                     </li>
@@ -164,12 +163,12 @@
                 </a>
                 <ul id="data-walikelas-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Wali Kelas</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Wali Kelas</span>
                         </a>
                     </li>
@@ -178,82 +177,101 @@
         </ul>
     </aside><!-- End Sidebar -->
 
-<main id="main" class="main">
+    <main id="main" class="main">
 
-<div class="pagetitle">
-    <h1>Data Siswa</h1>
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index">Home</a></li>
-            <li class="breadcrumb-item">Tabel</li>
-            <li class="breadcrumb-item active"> Data Siswa</li>
-        </ol>
-    </nav>
-</div><!-- End Page Title -->
-<div class="container">
-    <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Data Siswa</h5>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nama</th>
-                                    <th>NISN</th>
-                                    <th>Kelas</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>Tempat, Tanggal Lahir</th>
-                                    <th>Agama</th>
-                                    <th>Alamat</th>
-                                    <th>Nama Ayah</th>
-                                    <th>Pekerjaan Ayah</th>
-                                    <th>Nama Ibu</th>
-                                    <th>Pekerjaan Ibu</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($siswa as $index => $data)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $data->nama_siswa }}</td>
-                                    <td>{{ $data->nisn }}</td>
-                                    <td>{{ $data->kelas }}</td>
-                                    <td>{{ $data->jenis_kelamin }}</td>
-                                    <td>{{ $data->tempat_lahir }}, {{ $data->tanggal_lahir }}</td>
-                                    <td>{{ $data->agama }}</td>
-                                    <td>{{ $data->alamat }}</td>
-                                    <td>{{ $data->nama_ayah }}</td>
-                                    <td>{{ $data->pekerjaan_ayah }}</td>
-                                    <td>{{ $data->nama_ibu }}</td>
-                                    <td>{{ $data->pekerjaan_ibu }}</td>
-                                    <td style="display: flex; gap: 5px;">
-                                        <a href="{{ route('biodata_siswa.edit', $data->id) }}"
-                                            class="btn btn-warning btn-sm" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <form action="{{ route('biodata_siswa.destroy', $data->id) }}" method="POST"
-                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+        <div class="pagetitle">
+            <h1>Data Siswa</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index">Home</a></li>
+                    <li class="breadcrumb-item">Tabel</li>
+                    <li class="breadcrumb-item active"> Data Siswa</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <div class="container">
+            <section class="section">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Data Siswa</h5>
+                                <!-- Filter Kelas -->
+                                <form method="GET" action="{{ route('biodata_siswa.kelola') }}" class="mb-3">
+                                    <label for="kelas" class="form-label">Pilih Kelas:</label>
+                                    <select name="kelas" id="kelas" class="form-select" onchange="this.form.submit()">
+                                        @foreach ($daftarKelas as $kelas)
+                                        <option value="{{ $kelas->kelas }}"
+                                            {{ $kelasDipilih == $kelas->kelas ? 'selected' : '' }}>
+                                            Kelas {{ $kelas->kelas }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                                <!-- Tampilkan Nama Wali Kelas -->
+                                @if($kelasDipilih)
+                                <h4 class="mb-3">Wali Kelas: {{ $waliKelas ? $waliKelas->name : 'Belum Ditentukan' }}
+                                </h4>
+                                @endif
+                                <!-- Tabel Data Siswa -->
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nama</th>
+                                            <th>NISN</th>
+                                            <th>Kelas</th>
+                                            <th>Jenis Kelamin</th>
+                                            <th>Tempat, Tanggal Lahir</th>
+                                            <th>Agama</th>
+                                            <th>Alamat</th>
+                                            <th>Nama Ayah</th>
+                                            <th>Pekerjaan Ayah</th>
+                                            <th>Nama Ibu</th>
+                                            <th>Pekerjaan Ibu</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($siswa as $index => $data)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $data->nama_siswa }}</td>
+                                            <td>{{ $data->nisn }}</td>
+                                            <td>{{ $data->kelas }}</td>
+                                            <td>{{ $data->jenis_kelamin }}</td>
+                                            <td>{{ $data->tempat_lahir }}, {{ $data->tanggal_lahir }}</td>
+                                            <td>{{ $data->agama }}</td>
+                                            <td>{{ $data->alamat }}</td>
+                                            <td>{{ $data->nama_ayah }}</td>
+                                            <td>{{ $data->pekerjaan_ayah }}</td>
+                                            <td>{{ $data->nama_ibu }}</td>
+                                            <td>{{ $data->pekerjaan_ibu }}</td>
+                                            <td style="display: flex; gap: 5px;">
+                                                <a href="{{ route('biodata_siswa.edit', $data->id) }}"
+                                                    class="btn btn-warning btn-sm" title="Edit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <form action="{{ route('biodata_siswa.destroy', $data->id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Hapus">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
-    </section>
-</div>
 
     </main><!-- End #main -->
 

@@ -146,12 +146,12 @@
                 </a>
                 <ul id="data-guru-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Guru</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Guru</span>
                         </a>
                     </li>
@@ -164,12 +164,12 @@
                 </a>
                 <ul id="data-walikelas-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Wali Kelas</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Wali Kelas</span>
                         </a>
                     </li>
@@ -226,6 +226,17 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
+                                        <label for="kelas" class="col-sm-2 col-form-label">Kelas</label>
+                                        <div class="col-sm-10">
+                                            <select name="kelas" class="form-select" required>
+                                                <option disabled selected>Pilih Kelas</option>
+                                                @for ($i = 1; $i <= 6; $i++) <option value="{{ $i }}">Kelas {{ $i }}
+                                                    </option>
+                                                    @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
                                         <label for="email" class="col-sm-2 col-form-label">Email</label>
                                         <div class="col-sm-10">
                                             <input type="email" id="email" class="form-control" name="email" required>
@@ -238,7 +249,6 @@
                                                 required>
                                         </div>
                                     </div>
-
                                     <div class="row mb-3">
                                         <div class="col-sm-10 offset-sm-2">
                                             <button type="submit" class="btn btn-primary w-100">Tambah Wali

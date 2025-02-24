@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BiodataSiswa;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BiodataSiswaController extends Controller
@@ -48,13 +49,21 @@ class BiodataSiswaController extends Controller
     /**
      * Menampilkan daftar biodata siswa.
      */
-    public function kelola()
+    public function kelola(Request $request)
     {
-        // Mengambil semua data biodata siswa
-        $siswa = BiodataSiswa::all();
-        
-        // Menampilkan data ke view kelola
-        return view('biodata_siswa.kelola', compact('siswa')); // Pastikan ada file view ini di resources/views/biodata_siswa/kelola.blade.php
+        // Ambil daftar kelas yang tersedia dan urutkan dari yang terkecil
+        $daftarKelas = BiodataSiswa::select('kelas')->distinct()->orderBy('kelas')->get();
+
+        // Tentukan kelas terkecil sebagai default jika tidak ada yang dipilih
+        $kelasDipilih = $request->query('kelas', optional($daftarKelas->first())->kelas);
+
+        // Ambil data siswa berdasarkan kelas yang dipilih
+        $siswa = BiodataSiswa::where('kelas', $kelasDipilih)->get();
+
+        // Ambil wali kelas berdasarkan kelas yang dipilih
+        $waliKelas = User::where('role', 'Wali Kelas')->where('kelas', $kelasDipilih)->first();
+
+        return view('biodata_siswa.kelola', compact('siswa', 'daftarKelas', 'kelasDipilih', 'waliKelas'));
     }
 
     public function edit($id)

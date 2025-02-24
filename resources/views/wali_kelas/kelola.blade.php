@@ -217,6 +217,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nama</th>
+                                    <th>Kelas</th>
                                     <th>Email</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -226,6 +227,7 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $data->name }}</td>
+                                    <td>{{ $data->kelas }}</td>
                                     <td>{{ $data->email }}</td>
                                     <td style="display: flex; gap: 5px;">
                                         <a href="{{ route('wali_kelas.edit', $data->id) }}"

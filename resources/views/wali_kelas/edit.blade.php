@@ -146,12 +146,12 @@
                 </a>
                 <ul id="data-guru-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Guru</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Guru</span>
                         </a>
                     </li>
@@ -164,12 +164,12 @@
                 </a>
                 <ul id="data-walikelas-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Wali Kelas</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Wali Kelas</span>
                         </a>
                     </li>
@@ -203,19 +203,9 @@
                                 </div>
                                 @endif
 
-                                @if($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                                @endif
                                 <form action="{{ route('wali_kelas.update', $wali_kelas->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
-                                    <!-- Tambahkan method PUT untuk update -->
 
                                     <div class="row mb-3">
                                         <label for="name" class="col-sm-2 col-form-label">Nama Guru</label>
@@ -239,6 +229,19 @@
                                         <div class="col-sm-10">
                                             <input type="password" id="password" class="form-control" name="password"
                                                 placeholder="Kosongkan jika tidak ingin mengganti password">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="kelas" class="col-sm-2 col-form-label">Kelas</label>
+                                        <div class="col-sm-10">
+                                            <select name="kelas" class="form-select" required>
+                                                <option disabled>Pilih Kelas</option>
+                                                @for ($i = 1; $i <= 6; $i++) <option value="{{ $i }}"
+                                                    {{ $wali_kelas->kelas == $i ? 'selected' : '' }}>Kelas {{ $i }}
+                                                    </option>
+                                                    @endfor
+                                            </select>
                                         </div>
                                     </div>
 

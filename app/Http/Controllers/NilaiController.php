@@ -59,6 +59,8 @@ class NilaiController extends Controller
     return view('nilai.create', compact('dataSiswaNilai', 'id_mapel', 'mataPelajaran'));
 }
 
+// Mulai Code Penerapan Code Algritma Naive Bayes
+
 public function updateNilai(Request $request) 
 {
     try {
@@ -152,7 +154,9 @@ public function updateNilai(Request $request)
         if ($nilaiRapor >= 55) return 'C';
         if ($nilaiRapor >= 40) return 'D';
         return 'E';
-    }    
+    }   
+    
+// Selesai Code Penerapan Algritma Naive Bayes
     
 
     public function destroy($id)

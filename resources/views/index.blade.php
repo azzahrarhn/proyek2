@@ -235,18 +235,23 @@
                             </div>
                         </div>
                         <!-- Tambahkan Card Full untuk Selamat Datang -->
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <div class="card shadow-sm">
-                                <div class="card-body text-left">
-                                    <h2 class="fw-bold">Selamat Datang, Wali Kelas {{ $user->name }}!</h2>
-                                    <p class="text-muted">Kelola data sekolah dengan mudah melalui dashboard ini.</p>
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card shadow-sm">
+                                    <div class="card-body text-left">
+                                        <h2 class="fw-bold">
+                                            Selamat Datang, Wali Kelas {{ $user->name }}!
+                                        </h2>
+                                        <h4 class="fw-bold">Kelas: {{ $user->kelas }}</h4>
+                                        <!-- Menampilkan kelas -->
+                                        <p class="text-muted">Kelola data sekolah dengan mudah melalui dashboard ini.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </div>
-            </div>
+                </div>
         </section>
 
     </main><!-- End #main -->
