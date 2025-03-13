@@ -146,12 +146,12 @@
                 </a>
                 <ul id="data-guru-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Guru</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Guru</span>
                         </a>
                     </li>
@@ -164,12 +164,12 @@
                 </a>
                 <ul id="data-walikelas-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Wali Kelas</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Wali Kelas</span>
                         </a>
                     </li>
@@ -215,7 +215,6 @@
                                 <form action="{{ route('guru.update', $guru->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
-                                    <!-- Tambahkan method PUT untuk update -->
 
                                     <div class="row mb-3">
                                         <label for="name" class="col-sm-2 col-form-label">Nama Guru</label>
@@ -231,25 +230,29 @@
                                             <select id="kelas" class="form-select" name="kelas" required>
                                                 <option disabled>Pilih Kelas</option>
                                                 @for ($i = 1; $i <= 6; $i++) <option value="{{ $i }}"
-                                                    {{ $guru->kelas == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                    {{ $guru->kelas == $i ? 'selected' : '' }}>Kelas {{ $i }}</option>
                                                     @endfor
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="mata_pelajaran" class="col-sm-2 col-form-label">Mata
-                                            Pelajaran</label>
+                                        <label class="col-sm-2 col-form-label">Mata Pelajaran</label>
                                         <div class="col-sm-10">
-                                            <select name="mata_pelajaran" class="form-select" required>
-                                                <option disabled>Pilih Mata Pelajaran</option>
+                                            <div class="row">
                                                 @foreach ($mata_pelajaran as $mapel)
-                                                <option value="{{ $mapel->name }}"
-                                                    {{ $guru->mata_pelajaran == $mapel->id ? 'selected' : '' }}>
-                                                    {{ $mapel->name }}
-                                                </option>
+                                                <div class="col-md-3 col-sm-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="mata_pelajaran[]" value="{{ $mapel->name }}"
+                                                            id="mapel{{ $loop->index }}"
+                                                            {{ in_array($mapel->name, $selectedMataPelajaran) ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="mapel{{ $loop->index }}">{{ $mapel->name }}</label>
+                                                    </div>
+                                                </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
                                     </div>
 

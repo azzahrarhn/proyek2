@@ -146,12 +146,12 @@
                 </a>
                 <ul id="data-guru-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Guru</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('guru.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Guru</span>
                         </a>
                     </li>
@@ -164,12 +164,12 @@
                 </a>
                 <ul id="data-walikelas-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.create') }}">
                             <i class="bi bi-circle"></i><span>Tambah Data Wali Kelas</span>
                         </a>
                     </li>
                     <li>
-                    <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
+                        <a class="nav-link collapsed" href="{{ route('wali_kelas.kelola') }}">
                             <i class="bi bi-circle"></i><span>Kelola Data Wali Kelas</span>
                         </a>
                     </li>
@@ -215,37 +215,44 @@
                                 <form action="{{ route('guru.store') }}" method="POST">
                                     @csrf
                                     <div class="row mb-3">
-                                        <label for="nama" class="col-sm-2 col-form-label">Nama Guru</label>
+                                        <label for="name" class="col-sm-2 col-form-label">Nama Guru</label>
                                         <div class="col-sm-10">
                                             <input type="text" id="name" class="form-control"
                                                 placeholder="Masukkan nama lengkap guru" name="name" required>
                                         </div>
                                     </div>
+
                                     <div class="row mb-3">
-                                        <label for="kelas" class="col-sm-2 col-form-label">Kelas</label>
+                                        <label class="col-sm-2 col-form-label">Kelas</label>
                                         <div class="col-sm-10">
-                                            <select id="kelas" class="form-select" name="kelas" required>
-                                                <option selected disabled>Pilih Kelas</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
+                                            <select name="kelas" class="form-select" required>
+                                                <option disabled selected>Pilih Kelas</option>
+                                                @for ($i = 1; $i <= 6; $i++) <option value="{{ $i }}">Kelas {{ $i }}
+                                                    </option>
+                                                    @endfor
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="row mb-3">
-                                        <label for="nisn" class="col-sm-2 col-form-label">Mata Pelajaran</label>
+                                        <label class="col-sm-2 col-form-label">Mata Pelajaran</label>
                                         <div class="col-sm-10">
-                                            <select name="mata_pelajaran" class="form-select" required>
-                                                <option disabled selected>Pilih Mata Pelajaran</option>
+                                            <div class="row">
                                                 @foreach ($mata_pelajaran as $mapel)
-                                                <option value="{{ $mapel->name }}">{{ $mapel->name }}</option>
+                                                <div class="col-md-3 col-sm-6">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="mata_pelajaran[]" value="{{ $mapel->name }}"
+                                                            id="mapel{{ $loop->index }}">
+                                                        <label class="form-check-label"
+                                                            for="mapel{{ $loop->index }}">{{ $mapel->name }}</label>
+                                                    </div>
+                                                </div>
                                                 @endforeach
-                                            </select>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="row mb-3">
                                         <label for="alamat" class="col-sm-2 col-form-label">Alamat Guru</label>
                                         <div class="col-sm-10">
@@ -254,6 +261,7 @@
                                                 required></textarea>
                                         </div>
                                     </div>
+
                                     <div class="row mb-3">
                                         <label for="phone" class="col-sm-2 col-form-label">No Telp</label>
                                         <div class="col-sm-10">
@@ -261,6 +269,7 @@
                                                 placeholder="Masukkan No Telp" name="phone" required>
                                         </div>
                                     </div>
+
                                     <div class="row mb-3">
                                         <div class="col-sm-10 offset-sm-2">
                                             <button type="submit" class="btn btn-primary w-100">Tambah Data</button>

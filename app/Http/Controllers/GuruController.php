@@ -31,22 +31,25 @@ class GuruController extends Controller
             $request->validate([
                 'name' => 'required|string|max:255',
                 'kelas' => 'required|integer|between:1,6',
-                'mata_pelajaran' => 'nullable|string|max:255',
+                'mata_pelajaran' => 'nullable|array', // Validasi array dari checkbox
+                'mata_pelajaran.*' => 'string|max:255', // Validasi setiap item dalam array
                 'address' => 'nullable|string|max:255',
                 'phone' => 'nullable|string|max:15',
             ]);
+
+            // Ubah array mata pelajaran menjadi string dipisahkan koma
+            $mataPelajaranString = $request->mata_pelajaran ? implode(', ', $request->mata_pelajaran) : null;
 
             // Simpan ke database
             User::create([
                 'name' => $request->name,
                 'kelas' => $request->kelas,
-                'mata_pelajaran' => $request->mata_pelajaran,
+                'mata_pelajaran' => $mataPelajaranString,
                 'address' => $request->address,
                 'phone' => $request->phone,
             ]);
 
             return redirect()->route('guru.kelola')->with('success', 'Guru berhasil ditambahkan');
-
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Gagal menambahkan guru: ' . $e->getMessage());
         }
@@ -57,38 +60,44 @@ class GuruController extends Controller
     {
         $guru = User::findOrFail($id);
         $mata_pelajaran = MataPelajaran::all();
-        return view('guru.edit', compact('guru', 'mata_pelajaran'));
+
+        // Ubah string mata_pelajaran menjadi array agar checkbox bisa tetap terpilih
+        $selectedMataPelajaran = explode(', ', $guru->mata_pelajaran);
+        return view('guru.edit', compact('guru', 'mata_pelajaran', 'selectedMataPelajaran'));
     }
 
     // Menyimpan perubahan data guru
     public function update(Request $request, $id)
-{
-    try {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'kelas' => 'required|integer|between:1,6',
-            'mata_pelajaran' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:15',
-        ]);
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'kelas' => 'required|integer|between:1,6',
+                'mata_pelajaran' => 'nullable|array', // Mata pelajaran sebagai array
+                'mata_pelajaran.*' => 'string|max:255', 
+                'address' => 'nullable|string|max:255',
+                'phone' => 'nullable|string|max:15',
+            ]);
 
-        $guru = User::findOrFail($id); // Ambil  data guru
+            $guru = User::findOrFail($id);
 
-        // Update data
-        $guru->update([
-            'name' => $request->name,
-            'kelas' => $request->kelas,
-            'mata_pelajaran' => $request->mata_pelajaran,
-            'address' => $request->address,
-            'phone' => $request->phone,
-        ]);
+            // Ubah array mata pelajaran menjadi string dipisahkan koma
+            $mataPelajaranString = $request->mata_pelajaran ? implode(', ', $request->mata_pelajaran) : null;
 
-        return redirect()->route('guru.kelola')->with('success', 'Data guru berhasil diperbarui');
+            // Update data
+            $guru->update([
+                'name' => $request->name,
+                'kelas' => $request->kelas,
+                'mata_pelajaran' => $mataPelajaranString,
+                'address' => $request->address,
+                'phone' => $request->phone,
+            ]);
 
-    } catch (\Exception $e) {
-        return back()->withInput()->with('error', 'Gagal memperbarui guru: ' . $e->getMessage());
+            return redirect()->route('guru.kelola')->with('success', 'Data guru berhasil diperbarui');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Gagal memperbarui guru: ' . $e->getMessage());
+        }
     }
-}
 
     // Menghapus data guru
     public function destroy($id)
